@@ -6,7 +6,7 @@ def wlp(ko_match):
 	methanogen = 0
 	
 ##methyl branch acetogens
-#formate dehydrogenase. K05299/K15022: NADP-dependent, K00122/K00123/K00124/K00126/K00127/22515: NAD-dependent (did only take alpha and beta subunits, TO DO: unclear which ones are required), K22338-41: NAD/Fd bifurcating, K00125/K22516: F420-dependent, K22015: fdh(hydrogenase), K08348: Quinone dependent fdh. There is a lot mor orthologies though so things might be overlooked here.   
+#formate dehydrogenase. K05299/K15022: NADP-dependent, K00122/K00123/K00124/K00126/K00127/22515: NAD-dependent (did only take alpha and beta subunits), K22338-41: NAD/Fd bifurcating, K00125/K22516: F420-dependent, K22015: fdh(hydrogenase), K08348: Quinone dependent fdh. There is a lot mor orthologies though so things might be overlooked here.   
 	if  (('K05299' in ko_match and 'K15022' in ko_match) 
 		or ('K00123' in ko_match and 'K00124' in ko_match) 
 		or ('K22338' in ko_match and 'K22339' in ko_match and 'K22340' in ko_match and 'K22341' in ko_match) 
@@ -240,7 +240,7 @@ def acetylCoAsuccinylCoApws(ko_match):
 		out_data['pyruvate->oxaloacetate'] = 1
 		dicarboxylate += 1	
 #malate dehydrogenase
-	if ('K00116' in ko_match or 'K00024' in ko_match or 'K00025' in ko_match or 'K00026' in ko_match or 'K00051' in ko_match): #quinone, NADH, NADH, NADH, NADPH, To Do: No orthology for archaeal malate dehydrogenase, build hmm from https://www.genome.jp/dbget-bin/www_bget?ec:1.1.1.299 --> Jennys PhD thesis: Igni_1263, annotated as 00024, although with lower score . See https://www.genome.jp/entry/iho:Igni_1263. 
+	if ('K00116' in ko_match or 'K00024' in ko_match or 'K00025' in ko_match or 'K00026' in ko_match or 'K00051' in ko_match): #quinone, NADH, NADH, NADH, NADPH, To Do: No orthology for archaeal malate dehydrogenase, build hmm from https://www.genome.jp/dbget-bin/www_bget?ec:1.1.1.299 --> https://epub.uni-regensburg.de/32702/: Igni_1263, annotated as 00024, although with lower score . See https://www.genome.jp/entry/iho:Igni_1263. 
 		out_data['malate dehydrogenase'] = 1
 		dicarboxylate += 1
 #fumarate hydratase
@@ -366,7 +366,7 @@ def acetylCoAsuccinylCoApws(ko_match):
 	#	('K00234' in ko_match and 'K00235' in ko_match and 'K00236' in ko_match and 'K00237' in ko_match)): 
 		out_data['succinate dehydrogenase'] = 1
 		glyoxylate += 1
-#fumarate hydratase --> the original keggdecoder entry is bullshit because the ecoli fumarase genes each code for an independent fumarase. Put all of the KOs in OR
+#fumarate hydratase --> the original keggdecoder entry is wrong because the ecoli fumarase genes each code for an independent fumarase. Put all of the KOs in OR
 	if ('K01677' in ko_match or 'K01678' in ko_match or 'K01679' in ko_match or 'K01676' in ko_match):
 		out_data['fumarate hydratase'] = 1
 		glyoxylate += 1
@@ -402,7 +402,7 @@ def acetylCoAsuccinylCoApws(ko_match):
 	if('K15017' in ko_match or 'K15038' in ko_match or 'K18601' in ko_match): #msed OR pyrobaculum OR nmar. Nmar_1608 --> K18601 (Walker, 2010; not confirmed yet). No candidate gene in Ignicoccus. Not NADP(H) dependent (description paper)
 		hydroxybutyrate += 1
 		out_data['succinyl-CoA reductase'] = 1
-#succinate semialdehyde reductase To Do: no orthology for nmar, for igni : https://www.kegg.jp/dbget-bin/www_bget?iho:Igni_0132 (confirmed in Jennys PhD thesis) annotated as K11173
+#succinate semialdehyde reductase To Do: no orthology for nmar, for igni : https://www.kegg.jp/dbget-bin/www_bget?iho:Igni_0132 (confirmed in Jennifer Flechslers PhD thesis, https://epub.uni-regensburg.de/32702/) annotated as K11173
 	if('K14465' in ko_match or 'K11173' in ko_match): #(NADPH) 
 		hydroxybutyrate += 1
 		out_data['succinate semialdehyde reductase'] = 1
@@ -502,17 +502,9 @@ def redglycpw(ko_match):
 	glycinereductase = 0
 	glycineserine = 0
 	
-# To Do -- check if the double enzymes with the red. acetyl coa pw are consistent!
-	
+
 ##enzymes from supplementary data 3 from Sánchez-Andrea, 2020 --> used the enzymes from ATCC_27774 to search for corresponding KOs
 
-#formate dehydrogenase. K05299/K15022: NADP-dependent, K00122/K00123/K00124/K00126/K00127/22515: NAD-dependent (did only take alpha and beta subunits, TO DO: unclear which ones are required), K22338-41: NAD/Fd bifurcating, K00125/K22516: F420-dependent, K22015: fdh(hydrogenase), K08348: Quinone dependent fdh. There is a lot mor orthologies though so things might be overlooked here. 
-
-#--> and for the FDH EC 1.17.2.3 four out of six genes had to be detected (under the assumption that the two genes for the molybdenum cofactor, or any other two genes, could be present at a different genomic location). 
-# The FDH EC 1.17.1.9 was assumed to be present if four out of five genes could be detected (since either accessory gene or delta subunit seemed to be regularly missing). 
-# The FDH EC 1.17.1.10 was not evaluated, since only two genes were identified in D. desulfuricans, which seemed to have homology with the other FDHs. 
-# The FDH EC 1.17.1.11 was assumed to be present if five out of eight genes could be detected (under the assumption that the accessory protein and the two proteins for the production of the molybdenum cofactor, or any other three genes, could be present at a different genomic location). 
-# The FDH EC 1.17.5.3 was assumed to be present if all three genes could be detected. 
 	if (('K05299' in ko_match and 'K15022' in ko_match) 
 		or ('K00123' in ko_match and 'K00124' in ko_match) 
 		or ('K22338' in ko_match and 'K22339' in ko_match and 'K22340' in ko_match and 'K22341' in ko_match) 
@@ -524,7 +516,7 @@ def redglycpw(ko_match):
 		glycinereductase += 1
 		glycineserine += 1
 #Formate-THF ligase
-#formate--tetrahydrofolate ligase. The Desulfovibrio enzyme (Ddes_1296) doesnt have a KO. used the one thats in kegg. TO DO check finished script against Desulfovibrio, complempent the missing orthologies
+#formate--tetrahydrofolate ligase. The Desulfovibrio enzyme (Ddes_1296) doesnt have a KO. used the one thats in kegg. 
 	if ('K01938' in ko_match):
 		
 		out_data['formate-THF ligase'] = 1
@@ -536,7 +528,7 @@ def redglycpw(ko_match):
 		out_data['methylene-THF dehydrogenase/methenyl-THF cyclohydrolase'] = 1
 		glycinereductase += 1
 		glycineserine += 1
-#Glycine cleavage/synthase system (dihydrolipoamide dehydrogenase K00382, or L-Protein is not mentioned in the paper. No idea if thats important. Leave out for now. Conversely, this K0800 is not mentioned in kegg (?)
+#Glycine cleavage/synthase system (dihydrolipoamide dehydrogenase K00382, or L-Protein is not mentioned in the paper. Leave out for now. Conversely, this K0800 is not mentioned in kegg pathway(?)
 # --> Paper: The GCS was assumed to be present if three out of four genes could be detected
 	if (('K00283' in ko_match and 'K00282' in ko_match) #glycine dehydrogenase (decarboxylating), subunit 2/1, glycine cleavage system P-protein
 		and ('K02437' in ko_match) # Glycine cleavage system H-protein
